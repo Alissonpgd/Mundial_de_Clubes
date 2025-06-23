@@ -1,0 +1,611 @@
+/* src/App.css */
+
+/* === GERAL === */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  /* Padding será aplicado ao #background-container */
+  background-color: #f0f2f550;
+  /* Fallback se a imagem de fundo não carregar */
+  color: #333;
+  line-height: 1.6;
+  overflow-x: hidden;
+  /* Evita scroll horizontal que pode ser causado por alguns layouts de parallax */
+}
+
+/* === EFEITO DE BACKGROUND PARALLAX === */
+#background-container {
+  position: relative;
+  padding: 10px;
+  /* Espaçamento geral ao redor do conteúdo principal */
+}
+
+.parallax-background-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1;
+  background-image: url('../src/logos/Club\ World\ Cup\ 25\ Fifa.png');
+  /* Caminho para imagem na pasta 'public' */
+  background-size: contain;
+  /* Mostra a logo inteira, o fundo do body preenche o resto */
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* === DASHBOARD PRINCIPAL === */
+.tournament-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.13);
+  /* Fundo branco com 85% opacidade */
+  border-radius: 10px;
+  /* Bordas mais suaves */
+  padding: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Títulos das Seções */
+.group-stage-view h2,
+.knockout-bracket-view h2 {
+  font-size: 1.6em;
+  /* Ajustado */
+  color: #8c7853;
+  /* Dourado Escuro */
+  margin-top: 0;
+  /* Remove margem do topo se for o primeiro elemento */
+  margin-bottom: 20px;
+  border-bottom: 2px solid #d4af37;
+  /* Dourado Brilhante */
+  padding-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+/* === CONTAINERS INTERNOS (Cards) === */
+.group-stage-view,
+.knockout-bracket-view {
+  background-color: rgba(255, 255, 255, 0.459);
+  /* Branco com 92% opacidade */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* === GRUPOS === */
+.group {
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(224, 201, 149, 0.7);
+  /* Dourado Claro Translúcido */
+}
+
+.group:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.group h3 {
+  font-size: 1.3em;
+  /* Ajustado */
+  color: #b08d57;
+  /* Dourado Médio */
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+/* === LISTA DE JOGOS E INPUTS DE JOGO === */
+.match-list {
+  margin-bottom: 15px;
+}
+
+.match-list h4 {
+  /* Título "Jogos:" */
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+  color: #8c7853;
+}
+
+.match-input,
+.knockout-match-input {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.8);
+  /* Borda Dourada Translúcida */
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-size: 0.9em;
+  background-color: rgba(255, 250, 240, 0);
+  /* FloralWhite 90% Opacidade */
+  box-shadow: 0 1px 4px rgba(182, 141, 64, 0.2);
+}
+
+/* Contêiner para Logo + Nome do Time */
+.match-input .team-logo-name-container,
+.knockout-match-input .team-logo-name-container {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  /* Permite que ocupe espaço */
+  min-width: 120px;
+  /* Garante um espaço mínimo */
+}
+
+/* Estilo para os logos */
+.match-input img,
+.knockout-match-input img,
+.standings-table img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  margin-right: 8px;
+  background-color: rgba(248, 248, 248, 0.409);
+  /* Fundo leve para o logo */
+  border-radius: 4px;
+  padding: 2px;
+  vertical-align: middle;
+  /* Alinha melhor com o texto */
+}
+
+/* Ajuste para o Time 2 (logo depois do nome) */
+.match-input .team-logo-name-container.team2,
+.knockout-match-input .team-logo-name-container.team2 {
+  flex-direction: row-reverse;
+}
+
+.match-input .team-logo-name-container.team2 img,
+.knockout-match-input .team-logo-name-container.team2 img {
+  margin-right: 0;
+  margin-left: 8px;
+}
+
+.match-input .team-name,
+.knockout-match-input .team-name {
+  font-weight: 600;
+  color: #584c39;
+  /* Tom mais escuro para o nome do time para contraste */
+}
+
+/* Contêiner para inputs de score */
+.match-input .score-inputs-container,
+.knockout-match-input .score-inputs-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 10px;
+  /* Espaço nas laterais */
+}
+
+.match-input input[type="number"],
+.knockout-match-input input[type="number"] {
+  width: 48px;
+  /* Ligeiramente maior */
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #c8aE7D;
+  /* Borda Dourada */
+  border-radius: 4px;
+  font-size: 1em;
+  background-color: #ffffffcf;
+  /* Fundo branco para os inputs para legibilidade */
+  color: #333;
+}
+
+/* Contêiner para botão e info do jogo */
+.match-input .match-actions-info-container,
+.knockout-match-input .match-actions-info-container {
+  flex-basis: 100%;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.match-input button,
+.knockout-match-input button {
+  padding: 9px 18px;
+  /* Ajustado */
+  cursor: pointer;
+  background-color: #b08c57;
+  /* Dourado Médio */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  /* Ajustado */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  /* Ajustado */
+  transition: background-color 0.2s ease-in-out;
+  display: inline-block;
+  /* Para que o text-align do pai funcione */
+  min-width: 100px;
+  /* Largura mínima */
+}
+
+.match-input button:hover:not(:disabled),
+.knockout-match-input button:hover:not(:disabled) {
+  background-color: #8c785379;
+  /* Dourado Escuro */
+}
+
+.match-input button:disabled,
+.knockout-match-input button:disabled {
+  background-color: #d1c0a8;
+  /* Dourado Desbotado */
+  cursor: not-allowed;
+  color: #8c7853;
+}
+
+/* Informações do jogo (ID, data, local) */
+.match-input .match-actions-info-container div,
+.knockout-match-input .match-actions-info-container div {
+  font-size: 0.8em;
+  color: #777;
+  /* Cor mais suave */
+  margin-top: 6px;
+}
+
+/* Estilos para KnockoutMatchInput (específicos) */
+.knockout-match-info {
+  font-size: 0.9em;
+  /* Ajustado */
+  flex-basis: 100%;
+  text-align: center;
+  margin-bottom: 8px;
+  color: #8c7853;
+}
+
+.knockout-match-info strong {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 700;
+  /* Mais forte */
+  color: #b08d57;
+  font-size: 1.05em;
+  /* Ligeiramente maior */
+}
+
+.knockout-match-info span {
+  /* Para data/hora/local */
+  font-size: 0.9em;
+  color: #a08c6d;
+}
+
+
+/* === TABELA DE CLASSIFICAÇÃO === */
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85em;
+  /* Ajustado */
+  margin-top: 20px;
+  box-shadow: 0 2px 5px rgba(182, 141, 64, 0.2);
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background-color: rgba(255, 255, 255, 0.533);
+  /* Tabela com 92% Opacidade */
+  border-radius: 6px;
+  /* Bordas arredondadas para a tabela */
+}
+
+.standings-table th,
+.standings-table td {
+  border: 1px solid rgba(224, 201, 149, 0.75);
+  /* Borda Dourada Translúcida */
+  padding: 8px 10px;
+  /* Ajustado */
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.standings-table th {
+  background-color: rgba(250, 240, 230, 0.533);
+  /* Linen 95% Opacidade */
+  color: #8c7853;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  position: sticky;
+  /* Faz o cabeçalho grudar no topo ao rolar a tabela horizontalmente */
+  top: 0;
+  z-index: 2;
+  /* Para ficar acima das células ao rolar */
+}
+
+.standings-table td:nth-child(2) {
+  /* Coluna "Time" */
+  text-align: left;
+  font-weight: 500;
+  /* Leve destaque para o nome do time */
+}
+
+
+/* === FOOTER === */
+footer {
+  margin-top: 35px;
+  padding: 20px 0;
+  /* Adicionado padding vertical */
+  font-size: 0.85em;
+  color: #8c7853;
+  border-top: 1px solid #d4af37;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.541);
+  /* Fundo para o footer também */
+  border-radius: 0 0 8px 8px;
+  /* Arredonda cantos inferiores se o dashboard for arredondado */
+}
+
+
+/* =========================================== */
+/* === MEDIA QUERIES PARA RESPONSIVIDADE === */
+/* =========================================== */
+
+/* --- AJUSTES GERAIS PARA MOBILE DENTRO DE .match-input --- */
+@media (max-width: 767px) {
+  #background-container {
+    padding: 5px;
+  }
+
+  .tournament-dashboard {
+    padding: 10px;
+    gap: 15px;
+  }
+
+  .group-stage-view,
+  .knockout-bracket-view {
+    padding: 12px;
+  }
+
+  .group-stage-view h2,
+  .knockout-bracket-view h2 {
+    font-size: 1.4em;
+  }
+
+  .group h3 {
+    font-size: 1.15em;
+  }
+
+  .match-list h4 {
+    font-size: 1em;
+  }
+
+  .match-input .team-logo-name-container,
+  .knockout-match-input .team-logo-name-container {
+    flex-basis: calc(50% - 25px);
+    /* Tenta colocar cada time em 50% menos o espaço do placar */
+    justify-content: center;
+    min-width: 0;
+    /* Remove min-width para mais flexibilidade */
+    margin-bottom: 0;
+  }
+
+  .match-input .score-inputs-container,
+  .knockout-match-input .score-inputs-container {
+    flex-basis: 100%;
+    /* Placar abaixo dos times */
+    justify-content: center;
+    margin: 5px 0;
+  }
+
+  .match-input .match-actions-info-container,
+  .knockout-match-input .match-actions-info-container {
+    margin-top: 5px;
+  }
+
+  .match-input button,
+  .knockout-match-input button {
+    width: calc(100% - 20px);
+    /* Botão um pouco menor que 100% */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 8px 12px;
+  }
+}
+
+
+/* --- TABLETS (e celulares maiores em landscape) --- */
+@media (min-width: 768px) {
+  #background-container {
+    padding: 20px;
+  }
+
+  .tournament-dashboard {
+    gap: 30px;
+    padding: 25px;
+  }
+
+  .group-stage-view h2,
+  .knockout-bracket-view h2 {
+    font-size: 1.8em;
+    padding-bottom: 10px;
+  }
+
+  .group-stage-view,
+  .knockout-bracket-view {
+    padding: 25px;
+    background-color: rgba(255, 255, 255, 0.681);
+    /* Mais opaco em desktop */
+  }
+
+  .group h3 {
+    font-size: 1.4em;
+  }
+
+  .match-list h4 {
+    font-size: 1.1em;
+  }
+
+  .match-input,
+  .knockout-match-input {
+    font-size: 0.95em;
+    gap: 10px;
+    /* Restaura gap */
+    padding: 12px 15px;
+    flex-wrap: nowrap;
+    /* Tenta manter em uma linha em telas maiores */
+  }
+
+  .match-input .team-logo-name-container,
+  .knockout-match-input .team-logo-name-container {
+    flex-basis: auto;
+    /* Volta ao comportamento padrão de flex-grow */
+    justify-content: flex-start;
+    text-align: left;
+    min-width: 150px;
+    /* Garante espaço para nome e logo */
+  }
+
+  .match-input .score-inputs-container,
+  .knockout-match-input .score-inputs-container {
+    flex-basis: auto;
+    margin: 0 15px;
+    /* Espaço maior entre times e placar */
+  }
+
+  .match-input .match-actions-info-container,
+  .knockout-match-input .match-actions-info-container {
+    flex-basis: auto;
+    margin-top: 0;
+    margin-left: auto;
+    /* Empurra para a direita */
+    text-align: right;
+  }
+
+  .match-input button,
+  .knockout-match-input button {
+    width: auto;
+    margin-left: 10px;
+    /* Espaço antes do botão */
+    margin-right: 0;
+  }
+
+  .match-input .team-logo-name-container.team2,
+  .knockout-match-input .team-logo-name-container.team2 {
+    justify-content: flex-end;
+    /* Alinha o conteúdo (nome, logo) à direita */
+  }
+
+  .knockout-match-info {
+    font-size: 0.9em;
+    text-align: left;
+    flex-basis: auto;
+    margin-bottom: 0;
+    margin-right: 15px;
+    /* Espaço para o knockout info */
+  }
+
+  .standings-table {
+    font-size: 0.9em;
+    background-color: rgba(255, 255, 255, 0);
+  }
+
+  .standings-table th,
+  .standings-table td {
+    padding: 10px 12px;
+  }
+
+  .standings-table th {
+    font-size: 0.85em;
+    background-color: rgba(250, 240, 230, 0);
+  }
+
+  .standings-table img,
+  .match-input img,
+  .knockout-match-input img {
+    width: 32px;
+    height: 32px;
+    padding: 3px;
+  }
+
+  footer {
+    font-size: 0.85em;
+    background-color: rgba(255, 255, 255, 0);
+  }
+}
+
+/* --- AJUSTES ADICIONAIS PARA CELULARES MUITO PEQUENOS (opcional) --- */
+@media (max-width: 480px) {
+  #background-container {
+    padding: 5px;
+  }
+
+  .tournament-dashboard {
+    gap: 15px;
+    padding: 8px;
+    /* Ajustado */
+  }
+
+  .tournament-dashboard h1 {
+    font-size: 1.5em;
+    /* Título principal menor */
+    margin-bottom: 10px;
+    margin-left: 30px;
+  }
+
+  .group-stage-view,
+  .knockout-bracket-view {
+    padding: 10px;
+  }
+
+  .group-stage-view h2,
+  .knockout-bracket-view h2 {
+    font-size: 1.3em;
+  }
+
+  .group h3 {
+    font-size: 1.1em;
+  }
+
+  .match-input,
+  .knockout-match-input {
+    font-size: 0.85em;
+    padding: 8px;
+    gap: 5px;
+  }
+
+  /* Em telas muito pequenas, o layout do match-input pode precisar de mais ajustes
+     para empilhar os elementos de forma mais clara se o flex-basis: calc(50% - 25px) não for suficiente.
+     Por exemplo, forçar cada .team-logo-name-container a 100% e o .score-inputs-container também. */
+  .match-input .team-logo-name-container,
+  .knockout-match-input .team-logo-name-container {
+    flex-basis: 100%;
+    margin-bottom: 5px;
+  }
+
+  .match-input input[type="number"],
+  .knockout-match-input input[type="number"] {
+    width: 40px;
+    padding: 6px;
+  }
+
+  .standings-table img,
+  .match-input img,
+  .knockout-match-input img {
+    width: 24px;
+    height: 24px;
+    padding: 1px;
+  }
+
+  .standings-table {
+    font-size: 0.75em;
+  }
+
+  .standings-table th,
+  .standings-table td {
+    padding: 5px 6px;
+  }
+}
