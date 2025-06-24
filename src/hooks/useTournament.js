@@ -149,52 +149,60 @@ export const useTournament = () => {
         });
     }, []);
 
-    // Efeito para preencher o mata-mata (agora preenche conforme cada grupo termina)
+    // Efeito para preencher o mata-mata (agora preenche conforme cada fase termina)
     useEffect(() => {
-        // Para cada grupo, se todos os jogos do grupo foram jogados, preenche os slots das oitavas relacionados a esse grupo
         setKnockoutMatches(prevKnockout => {
             let updatedKnockout = [...prevKnockout];
 
-            // Função para buscar o time classificado para um placeholder (ex: '1º Grupo A')
+            // Função para buscar o time classificado para um placeholder (ex: '1º Grupo A' ou 'Vencedor 123')
             const getTeamForPlaceholder = (placeholder) => {
                 if (!placeholder) return null;
                 const parts = placeholder.split(' ');
-                if (parts.length < 3) return null;
-                const position = parseInt(parts[0], 10);
-                const groupKey = parts[2];
-                if (
-                    groupsData[groupKey] &&
-                    groupsData[groupKey].matches.every(m => m.played) &&
-                    groupsData[groupKey].standings.length >= position
-                ) {
-                    return groupsData[groupKey].standings[position - 1].teamId;
+                if (parts[0] === 'Vencedor') {
+                    // Exemplo: 'Vencedor 123'
+                    const matchId = parts[1];
+                    const match = updatedKnockout.find(m => m.id === matchId);
+                    if (match && match.played && match.winnerId) {
+                        return match.winnerId;
+                    }
+                    return null;
+                } else if (parts.length >= 3) {
+                    // Exemplo: '1º Grupo A'
+                    const position = parseInt(parts[0], 10);
+                    const groupKey = parts[2];
+                    if (
+                        groupsData[groupKey] &&
+                        groupsData[groupKey].matches.every(m => m.played) &&
+                        groupsData[groupKey].standings.length >= position
+                    ) {
+                        return groupsData[groupKey].standings[position - 1].teamId;
+                    }
                 }
                 return null;
             };
 
+            // Atualiza todos os jogos do mata-mata (oitavas, quartas, semi, final)
             updatedKnockout = updatedKnockout.map(match => {
-                if (match.stage === 'Oitavas') {
-                    let team1Id = match.team1Id;
-                    let team2Id = match.team2Id;
-                    // Só tenta preencher se ainda não estiver preenchido
-                    if (!team1Id) {
-                        const t1 = getTeamForPlaceholder(match.team1Placeholder);
-                        if (t1) team1Id = t1;
-                    }
-                    if (!team2Id) {
-                        const t2 = getTeamForPlaceholder(match.team2Placeholder);
-                        if (t2) team2Id = t2;
-                    }
-                    // Só atualiza se mudou
-                    if (team1Id !== match.team1Id || team2Id !== match.team2Id) {
-                        return { ...match, team1Id, team2Id };
-                    }
+                // Só tenta preencher se ainda não estiver preenchido
+                let team1Id = match.team1Id;
+                let team2Id = match.team2Id;
+                if (!team1Id) {
+                    const t1 = getTeamForPlaceholder(match.team1Placeholder);
+                    if (t1) team1Id = t1;
+                }
+                if (!team2Id) {
+                    const t2 = getTeamForPlaceholder(match.team2Placeholder);
+                    if (t2) team2Id = t2;
+                }
+                // Só atualiza se mudou
+                if (team1Id !== match.team1Id || team2Id !== match.team2Id) {
+                    return { ...match, team1Id, team2Id };
                 }
                 return match;
             });
             return updatedKnockout;
         });
-    }, [groupsData]); // Atualiza sempre que groupsData mudar
+    }, [groupsData]); // Atualiza sempre que groupsData mudar OU knockoutMatches mudar
 
 
     const handleKnockoutScoreSubmit = useCallback((matchId, score1, score2) => {
