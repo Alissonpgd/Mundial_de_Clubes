@@ -149,46 +149,52 @@ export const useTournament = () => {
         });
     }, []);
 
-    // Efeito para preencher o mata-mata (permanece o mesmo)
+    // Efeito para preencher o mata-mata (agora preenche conforme cada grupo termina)
     useEffect(() => {
-        // ... (lógica existente para preencher oitavas)
-        const allGroupsFinished = Object.values(groupsData).every(group =>
-            group.matches.every(match => match.played)
-        );
+        // Para cada grupo, se todos os jogos do grupo foram jogados, preenche os slots das oitavas relacionados a esse grupo
+        setKnockoutMatches(prevKnockout => {
+            let updatedKnockout = [...prevKnockout];
 
-        if (allGroupsFinished) {
-            setKnockoutMatches(prevKnockout => {
-                let updatedKnockout = [...prevKnockout];
-                const getTeamForPlaceholder = (placeholder) => {
-                    if (!placeholder) return null;
-                    const parts = placeholder.split(' ');
-                    if (parts.length < 3) return null;
-                    const position = parseInt(parts[0], 10);
-                    const groupKey = parts[2];
-                    if (groupsData[groupKey] && groupsData[groupKey].standings.length >= position) {
-                        return groupsData[groupKey].standings[position - 1].teamId;
-                    }
-                    return null;
-                };
+            // Função para buscar o time classificado para um placeholder (ex: '1º Grupo A')
+            const getTeamForPlaceholder = (placeholder) => {
+                if (!placeholder) return null;
+                const parts = placeholder.split(' ');
+                if (parts.length < 3) return null;
+                const position = parseInt(parts[0], 10);
+                const groupKey = parts[2];
+                if (
+                    groupsData[groupKey] &&
+                    groupsData[groupKey].matches.every(m => m.played) &&
+                    groupsData[groupKey].standings.length >= position
+                ) {
+                    return groupsData[groupKey].standings[position - 1].teamId;
+                }
+                return null;
+            };
 
-                updatedKnockout = updatedKnockout.map(match => {
-                    if (match.stage === 'Oitavas' && (!match.team1Id || !match.team2Id)) {
-                        const team1Id = getTeamForPlaceholder(match.team1Placeholder);
-                        const team2Id = getTeamForPlaceholder(match.team2Placeholder);
-                        if (team1Id && team2Id) {
-                            // Só atualiza se o ID não for igual ao placeholder para evitar loops desnecessários
-                            // e garantir que só atualizamos uma vez ou se os times realmente mudarem.
-                            if (match.team1Id !== team1Id || match.team2Id !== team2Id) {
-                                return { ...match, team1Id, team2Id };
-                            }
-                        }
+            updatedKnockout = updatedKnockout.map(match => {
+                if (match.stage === 'Oitavas') {
+                    let team1Id = match.team1Id;
+                    let team2Id = match.team2Id;
+                    // Só tenta preencher se ainda não estiver preenchido
+                    if (!team1Id) {
+                        const t1 = getTeamForPlaceholder(match.team1Placeholder);
+                        if (t1) team1Id = t1;
                     }
-                    return match;
-                });
-                return updatedKnockout;
+                    if (!team2Id) {
+                        const t2 = getTeamForPlaceholder(match.team2Placeholder);
+                        if (t2) team2Id = t2;
+                    }
+                    // Só atualiza se mudou
+                    if (team1Id !== match.team1Id || team2Id !== match.team2Id) {
+                        return { ...match, team1Id, team2Id };
+                    }
+                }
+                return match;
             });
-        }
-    }, [groupsData]); // A dependência groupsData já dispara isso corretamente
+            return updatedKnockout;
+        });
+    }, [groupsData]); // Atualiza sempre que groupsData mudar
 
 
     const handleKnockoutScoreSubmit = useCallback((matchId, score1, score2) => {
