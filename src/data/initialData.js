@@ -18,7 +18,7 @@ export const teams = [
     { id: 'esperance', name: 'Espérance', logo: 'esperance.png' },
     { id: 'los_angeles_fc', name: 'Los Angeles FC', logo: 'los_angeles_fc.png' },
     { id: 'river_plate', name: 'River Plate', logo: 'river_plate.png' },
-    { id: 'inter_de_milão', name: 'Inter de Milão', logo: 'inter_milan.png' },
+    { id: 'inter_de_milao', name: 'Inter de Milão', logo: 'inter_milan.png' },
     { id: 'monterrey', name: 'Monterrey', logo: 'monterrey.png' },
     { id: 'urawa_red_diamonds', name: 'Urawa Red Diamonds', logo: 'urawa_red_diamonds.png' },
     { id: 'fluminense', name: 'Fluminense', logo: 'fluminense.png' },
